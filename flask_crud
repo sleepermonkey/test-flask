@@ -100,6 +100,19 @@ def search_transactions():
     # If the request method is GET, find the transaction with the matching ID and render the edit form
     return render_template("search.html", transaction=transactions)
 
+@app.route("/balance", methods=["GET", "POST"])
+def total_balance():
+    balance = 0
+    filtered_transactions = []
+
+    for transaction in transactions:
+        balance = balance + transaction["amount"]
+        filtered_transactions.append(transaction)
+
+    balance_text = "Total Balance: {balance}".format(balance = balance)
+    filtered_transactions.append({'id': 0, 'date': balance_text, 'amount': balance})
+    return render_template("transactions.html", transactions=filtered_transactions)
+
 # Run the Flask app
 if __name__ == "__main__":
     app.run(debug=True)
